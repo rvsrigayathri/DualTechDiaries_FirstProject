@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { saveResumeToBackend } from '../api/resume'
 
 const STORAGE_KEY = 'resumecraft_draft_v2'
 
@@ -82,11 +83,14 @@ export function useResumeStore() {
 
     clearTimeout(autoSaveTimerRef.current)
     setAutoSaving(true)
-    autoSaveTimerRef.current = setTimeout(() => {
+    autoSaveTimerRef.current = setTimeout(async () => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
         const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         setLastSaved(t)
+        try {
+          await saveResumeToBackend(data)
+        } catch { /* backend offline fallback */ }
       } catch (e) {
         console.error('Auto-save failed', e)
       }
@@ -200,13 +204,16 @@ export function useResumeStore() {
     })
 
   // ── Persistence ───────────────────────────────────────────
-  const saveDraft = () => {
+  const saveDraft = async () => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
       const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       setLastSaved(t)
       setSaveToast(true)
       setTimeout(() => setSaveToast(false), 3000)
+      try {
+        await saveResumeToBackend(data)
+      } catch { /* backend offline fallback */ }
     } catch (e) {
       console.error('Save failed', e)
     }
