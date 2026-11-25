@@ -1,0 +1,38 @@
+# ── Node.js / Frontend ──────────────────────────────────────────
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.vite/
+**/.vite/
+*.local
+
+# ── Java / Maven ─────────────────────────────────────────────────
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ── IDE & OS files ───────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Environment / Secrets ────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Logs ─────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+
+# ── H2 database files ────────────────────────────────────────────
+*.mv.db
+*.trace.db

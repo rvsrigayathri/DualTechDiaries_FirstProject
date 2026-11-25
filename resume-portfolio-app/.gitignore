@@ -1,0 +1,34 @@
+# ── Node.js / Frontend ──────────────────────────────────────────
+node_modules/
+dist/
+.vite/
+*.local
+
+# ── Java / Maven ─────────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ── IDE & OS files ───────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Environment / Secrets ────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Logs ─────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+
+# ── H2 database files (file-mode, used in Phase 3) ───────────────
+data/resumedb.mv.db
+data/resumedb.trace.db
