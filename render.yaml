@@ -1,0 +1,34 @@
+# Render Blueprint for automated Spring Boot backend + Managed PostgreSQL deployment
+services:
+  - type: web
+    name: resumecraft-backend
+    env: docker
+    dockerfilePath: ./resume-portfolio-app/backend/Dockerfile
+    dockerContext: ./resume-portfolio-app/backend
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: resumecraft-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: resumecraft-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: resumecraft-db
+          property: password
+      - key: SPRING_DATASOURCE_DRIVER
+        value: org.postgresql.Driver
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:5173,https://frontend-rvsrigayathris-projects.vercel.app,https://*.vercel.app
+
+databases:
+  - name: resumecraft-db
+    plan: free
+    region: oregon
+    databaseName: resumecraft
+    user: resumecraft_user
