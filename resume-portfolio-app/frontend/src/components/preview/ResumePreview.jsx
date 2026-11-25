@@ -83,6 +83,15 @@ export default function ResumePreview({ data, onUpdateSettings }) {
                 onClick={() => onUpdateSettings('accentColor', c.hex)}
               />
             ))}
+            <label className="color-custom-label" title="Pick custom hex color">
+              <input
+                type="color"
+                className="color-custom-input"
+                value={settings.accentColor || '#2457d6'}
+                onChange={e => onUpdateSettings('accentColor', e.target.value)}
+              />
+              <span className="color-custom-icon">🎨</span>
+            </label>
           </div>
 
           <span className="preview-controls-label" style={{ marginLeft: 8 }}>Secondary</span>
@@ -97,6 +106,15 @@ export default function ResumePreview({ data, onUpdateSettings }) {
                 onClick={() => onUpdateSettings('secondaryColor', c.hex)}
               />
             ))}
+            <label className="color-custom-label" title="Pick custom secondary color">
+              <input
+                type="color"
+                className="color-custom-input"
+                value={settings.secondaryColor || '#0f172a'}
+                onChange={e => onUpdateSettings('secondaryColor', e.target.value)}
+              />
+              <span className="color-custom-icon">🎨</span>
+            </label>
           </div>
         </div>
 

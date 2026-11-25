@@ -692,6 +692,37 @@ a { color: var(--blue); text-decoration: none; }
 .color-swatch:hover { transform: scale(1.15); }
 .color-swatch.active { border-color: var(--text); }
 
+/* Custom color picker button */
+.color-custom-label {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--surface);
+  transition: all var(--transition);
+}
+.color-custom-label:hover {
+  border-color: var(--blue);
+  background: var(--light-blue);
+  transform: scale(1.1);
+}
+.color-custom-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.color-custom-icon {
+  font-size: 13px;
+  pointer-events: none;
+}
+
 /* 13. Preview panel */
 .preview-panel {
   flex: 1;
@@ -1078,6 +1109,14 @@ a { color: var(--blue); text-decoration: none; }
   border-radius: 4px;
   text-transform: uppercase;
 }
+.rec-match-score {
+  font-size: 10px;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
 .rec-ats-pill {
   font-size: 9.5px;
   font-weight: 600;
@@ -1097,6 +1136,12 @@ a { color: var(--blue); text-decoration: none; }
   color: #4b5563;
   line-height: 1.4;
   flex: 1;
+}
+.rec-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
 }
 
 /* ── Gallery Toolbar ── */
@@ -1273,11 +1318,125 @@ a { color: var(--blue); text-decoration: none; }
   font-size: 11.5px;
   color: var(--muted);
   line-height: 1.4;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   flex: 1;
+}
+.gallery-card-bestfor {
+  font-size: 10.5px;
+  color: #475569;
+  background: #f8fafc;
+  padding: 4px 6px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  line-height: 1.35;
 }
 .gallery-card-action-row {
   margin-top: auto;
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Full Template Preview Modal ── */
+.template-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.template-modal-window {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalScaleIn 0.2s ease-out;
+}
+@keyframes modalScaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.template-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+}
+.template-modal-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.template-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.template-modal-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--light-blue);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.template-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.template-modal-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+}
+.template-modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+.template-modal-meta {
+  padding: 8px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: #334155;
+  display: flex;
+  align-items: center;
+}
+.template-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background: #cbd5e1;
+  display: flex;
+  justify-content: center;
+}
+.template-modal-page-wrapper {
+  width: 100%;
+  max-width: 650px;
+}
+.template-modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* ── Mini Thumbnail Layouts ── */

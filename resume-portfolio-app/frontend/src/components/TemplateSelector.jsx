@@ -2,19 +2,23 @@ import { useState, useMemo } from 'react'
 import SectionHeader from './ui/SectionHeader'
 import { TEMPLATES, TEMPLATE_CATEGORIES } from '../registry/templateRegistry'
 import { recommendTemplates } from '../utils/templateRecommender'
+import TemplatePreviewModal from './gallery/TemplatePreviewModal'
 
 export default function TemplateSelector({ settings, onUpdateSettings, resumeData }) {
   const selected = settings?.template || 'ats_professional'
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [modalTemplate, setModalTemplate] = useState(null)
 
   // Compute smart recommendations based on real user resume data
   const recommendations = useMemo(() => {
     return recommendTemplates(resumeData)
   }, [resumeData])
 
-  const recommendedIds = useMemo(() => {
-    return new Set(recommendations.map(r => r.id))
+  const recommendedMap = useMemo(() => {
+    const map = new Map()
+    recommendations.forEach(r => map.set(r.id, r))
+    return map
   }, [recommendations])
 
   // Filter templates
@@ -33,7 +37,8 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
         !q ||
         t.label.toLowerCase().includes(q) ||
         t.description.toLowerCase().includes(q) ||
-        t.badge.toLowerCase().includes(q)
+        t.badge.toLowerCase().includes(q) ||
+        (t.bestFor && t.bestFor.toLowerCase().includes(q))
 
       return matchesCat && matchesSearch
     })
@@ -41,7 +46,7 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
 
   const handleSelect = (templateId) => {
     onUpdateSettings('template', templateId)
-    // Also scroll down or focus preview if needed
+    // On mobile, scroll to preview tab
     const previewEl = document.getElementById('section-preview')
     if (previewEl && window.innerWidth <= 1100) {
       previewEl.scrollIntoView({ behavior: 'smooth' })
@@ -53,7 +58,7 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
       <SectionHeader
         step="7"
         title="Resume Templates Collection"
-        subtitle="Explore 12 professional templates tailored for every career stage"
+        subtitle="12 professional templates tailored for every career path with smart layout recommendations"
       />
 
       <div className="card-body">
@@ -83,18 +88,29 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
                   >
                     <div className="rec-card-top">
                       <span className="rec-badge">★ Top Pick</span>
+                      <span className="rec-match-score">{rec.matchPercent}% Match</span>
                       {tmpl.isAts && <span className="rec-ats-pill">ATS Safe</span>}
                     </div>
                     <div className="rec-card-name">{tmpl.label}</div>
                     <div className="rec-card-reason">💡 {rec.reason}</div>
-                    <button
-                      type="button"
-                      className={`btn btn-xs ${isCur ? 'btn-primary' : 'btn-secondary'}`}
-                      style={{ marginTop: 8, width: '100%' }}
-                      onClick={(e) => { e.stopPropagation(); handleSelect(tmpl.id) }}
-                    >
-                      {isCur ? '✓ Currently Selected' : 'Use This Template'}
-                    </button>
+                    <div className="rec-card-actions">
+                      <button
+                        type="button"
+                        className={`btn btn-xs ${isCur ? 'btn-primary' : 'btn-secondary'}`}
+                        style={{ flex: 1 }}
+                        onClick={(e) => { e.stopPropagation(); handleSelect(tmpl.id) }}
+                      >
+                        {isCur ? '✓ Active' : 'Use Template'}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-ghost btn-xs"
+                        title="Preview with your resume data"
+                        onClick={(e) => { e.stopPropagation(); setModalTemplate(tmpl) }}
+                      >
+                        👁️ Preview
+                      </button>
+                    </div>
                   </div>
                 )
               })}
@@ -108,7 +124,7 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
             <span className="search-icon">🔍</span>
             <input
               type="text"
-              placeholder="Search templates by role, style, or industry..."
+              placeholder="Search by role, style, keywords (e.g. Developer, ATS, Executive)..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="gallery-search-input"
@@ -142,7 +158,7 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
         <div className="gallery-grid">
           {filteredTemplates.map(t => {
             const isSelected = selected === t.id
-            const isRec = recommendedIds.has(t.id)
+            const recInfo = recommendedMap.get(t.id)
 
             return (
               <div
@@ -153,8 +169,8 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
                 {/* Visual Thumbnail */}
                 <div className="gallery-thumb-wrap">
                   <TemplateThumbnail templateId={t.id} />
-                  {isRec && (
-                    <span className="gallery-thumb-rec-tag">★ Recommended</span>
+                  {recInfo && (
+                    <span className="gallery-thumb-rec-tag">★ {recInfo.matchPercent}% Match</span>
                   )}
                   {t.isAts && (
                     <span className="gallery-thumb-ats-tag">ATS Safe</span>
@@ -173,15 +189,28 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
                     <span className="gallery-card-badge">{t.badge}</span>
                   </div>
                   <div className="gallery-card-desc">{t.description}</div>
+                  {t.bestFor && (
+                    <div className="gallery-card-bestfor">
+                      <strong>Best for: </strong>{t.bestFor}
+                    </div>
+                  )}
 
                   <div className="gallery-card-action-row">
                     <button
                       type="button"
                       className={`btn btn-sm ${isSelected ? 'btn-primary' : 'btn-secondary'}`}
-                      style={{ width: '100%' }}
+                      style={{ flex: 1 }}
                       onClick={(e) => { e.stopPropagation(); handleSelect(t.id) }}
                     >
                       {isSelected ? '✓ Selected' : 'Select Template'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-ghost btn-sm"
+                      title="Preview this template with your real data"
+                      onClick={(e) => { e.stopPropagation(); setModalTemplate(t) }}
+                    >
+                      👁️ Preview
                     </button>
                   </div>
                 </div>
@@ -205,6 +234,15 @@ export default function TemplateSelector({ settings, onUpdateSettings, resumeDat
           </div>
         )}
       </div>
+
+      {/* ── Live Full Template Preview Modal ── */}
+      <TemplatePreviewModal
+        template={modalTemplate}
+        resumeData={resumeData}
+        isOpen={Boolean(modalTemplate)}
+        onClose={() => setModalTemplate(null)}
+        onSelect={handleSelect}
+      />
     </div>
   )
 }
