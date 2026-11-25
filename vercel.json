@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd resume-portfolio-app/frontend && npm install && npm run build",
+  "outputDirectory": "resume-portfolio-app/frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
