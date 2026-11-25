@@ -1780,3 +1780,176 @@ a { color: var(--blue); text-decoration: none; }
   font-size: 13.5px;
 }
 .empty-state-icon { font-size: 32px; margin-bottom: 10px; }
+
+/* 24. Shared Reusable Template Elements */
+.rt-bullet-list {
+  margin: 4px 0 2px 14px;
+  padding: 0;
+  list-style-type: disc;
+}
+.rt-bullet-item {
+  font-size: 11px;
+  line-height: 1.5;
+  margin-bottom: 2px;
+  color: #2d3a4f;
+}
+.rt-shared-header {
+  margin-bottom: 12px;
+}
+.header-centered {
+  text-align: center;
+}
+.rt-header-name {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.rt-header-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.rt-header-contact-inline {
+  font-size: 10px;
+  color: #555;
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.rt-contact-dot {
+  color: #94a3b8;
+  margin: 0 2px;
+}
+.header-split {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+.rt-header-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rt-header-photo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--border);
+}
+.rt-header-contact-stack {
+  text-align: right;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #475569;
+}
+.rt-header-contact-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.rt-contact-icon {
+  font-size: 11px;
+}
+.header-banner {
+  padding: 18px 22px;
+  color: #ffffff;
+}
+.rt-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.rt-banner-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.6);
+}
+.rt-banner-avatar-fallback {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.rt-banner-name {
+  font-size: 19px;
+  font-weight: 800;
+  color: #ffffff;
+}
+.rt-banner-role {
+  font-size: 12px;
+  opacity: 0.92;
+  margin-top: 1px;
+}
+.rt-banner-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 10px;
+  margin-top: 5px;
+  opacity: 0.88;
+}
+
+/* Shared Sections */
+.rt-shared-section {
+  margin-bottom: 12px;
+  page-break-inside: avoid;
+}
+.rt-sec-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.rt-sec-badge {
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.rt-sec-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.rt-sec-variant-underline .rt-sec-title {
+  border-bottom: 1.5px solid;
+  padding-bottom: 2px;
+  width: 100%;
+}
+.rt-sec-variant-double-rule .rt-sec-title {
+  border-top: 2px solid;
+  border-bottom: 1px solid;
+  padding: 3px 0;
+  width: 100%;
+}
+.rt-skill-line {
+  font-size: 11px;
+  line-height: 1.6;
+  margin-bottom: 3px;
+}
+.rt-skill-group {
+  margin-bottom: 6px;
+}
+.rt-skill-group-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
