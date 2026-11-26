@@ -9,11 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * REST Controller for resume draft persistence in H2 Database.
+ * REST Controller for resume draft persistence.
+ * Mapped to /api/resume with routes for save, latest, id, all, and root info.
  */
 @RestController
 @RequestMapping("/api/resume")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "https://*.vercel.app"})
 public class ResumeController {
 
     private final ProfileRepository profileRepository;
@@ -32,9 +32,27 @@ public class ResumeController {
     }
 
     /**
-     * POST /api/resume/save - Saves or updates a resume profile in H2.
+     * GET /api/resume - Root info and API endpoint discovery.
      */
-    @PostMapping("/save")
+    @GetMapping({"", "/"})
+    public ResponseEntity<Map<String, Object>> getResumeApiInfo() {
+        Map<String, Object> info = new HashMap<>();
+        info.put("status", "Resume persistence API is active");
+        info.put("endpoints", List.of(
+                "POST /api/resume/save - Save or update resume draft",
+                "GET /api/resume/latest - Get most recent resume draft",
+                "GET /api/resume/all - Get all resume drafts",
+                "GET /api/resume/{id} - Get resume draft by ID"
+        ));
+        info.put("totalDrafts", profileRepository.count());
+        return ResponseEntity.ok(info);
+    }
+
+    /**
+     * POST /api/resume/save - Saves or updates a resume profile.
+     * Supports both /api/resume/save and /api/resume/save/
+     */
+    @PostMapping({"/save", "/save/"})
     public ResponseEntity<Map<String, Object>> saveResume(@RequestBody SaveResumeRequest request) {
         Profile profile;
 
@@ -63,12 +81,22 @@ public class ResumeController {
 
     /**
      * GET /api/resume/latest - Returns the most recently updated resume draft.
+     * Supports both /api/resume/latest and /api/resume/latest/
+     * If database is empty, returns HTTP 404 with structured JSON explaining the state.
      */
-    @GetMapping("/latest")
+    @GetMapping({"/latest", "/latest/"})
     public ResponseEntity<?> getLatestResume() {
         Optional<Profile> latest = profileRepository.findTopByOrderByUpdatedAtDesc();
         if (latest.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            latest = profileRepository.findTopByOrderByIdDesc();
+        }
+
+        if (latest.isEmpty()) {
+            Map<String, Object> notFoundResponse = new HashMap<>();
+            notFoundResponse.put("status", "not_found");
+            notFoundResponse.put("message", "No resume drafts found in database. Use POST /api/resume/save to persist a draft.");
+            notFoundResponse.put("profile", null);
+            return ResponseEntity.status(404).body(notFoundResponse);
         }
 
         Profile p = latest.get();
@@ -87,11 +115,14 @@ public class ResumeController {
     /**
      * GET /api/resume/{id} - Loads a resume by ID.
      */
-    @GetMapping("/{id}")
+    @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<?> getResumeById(@PathVariable Long id) {
         Optional<Profile> profile = profileRepository.findById(id);
         if (profile.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            Map<String, Object> notFound = new HashMap<>();
+            notFound.put("status", "not_found");
+            notFound.put("message", "Resume profile with id " + id + " not found.");
+            return ResponseEntity.status(404).body(notFound);
         }
 
         Profile p = profile.get();
@@ -108,14 +139,14 @@ public class ResumeController {
     }
 
     /**
-     * GET /api/resume/all - Summarizes all saved resume profiles.
+     * GET /api/resume/all - Returns all resume drafts ordered by last update.
      */
-    @GetMapping("/all")
-    public ResponseEntity<List<Map<String, Object>>> getAllProfiles() {
-        List<Profile> list = profileRepository.findAllByOrderByUpdatedAtDesc();
-        List<Map<String, Object>> summaries = new ArrayList<>();
+    @GetMapping({"/all", "/all/"})
+    public ResponseEntity<List<Map<String, Object>>> getAllResumes() {
+        List<Profile> profiles = profileRepository.findAllByOrderByUpdatedAtDesc();
+        List<Map<String, Object>> responseList = new ArrayList<>();
 
-        for (Profile p : list) {
+        for (Profile p : profiles) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", p.getId());
             map.put("fullName", p.getFullName());
@@ -123,9 +154,9 @@ public class ResumeController {
             map.put("desiredRole", p.getDesiredRole());
             map.put("targetTemplate", p.getTargetTemplate());
             map.put("updatedAt", p.getUpdatedAt() != null ? p.getUpdatedAt().toString() : "");
-            summaries.add(map);
+            responseList.add(map);
         }
 
-        return ResponseEntity.ok(summaries);
+        return ResponseEntity.ok(responseList);
     }
 }

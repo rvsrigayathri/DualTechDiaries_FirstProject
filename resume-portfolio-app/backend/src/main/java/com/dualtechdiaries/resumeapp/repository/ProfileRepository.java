@@ -15,6 +15,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     Optional<Profile> findTopByOrderByUpdatedAtDesc();
 
+    Optional<Profile> findTopByOrderByIdDesc();
+
     List<Profile> findByEmailOrderByUpdatedAtDesc(String email);
 
     List<Profile> findAllByOrderByUpdatedAtDesc();
