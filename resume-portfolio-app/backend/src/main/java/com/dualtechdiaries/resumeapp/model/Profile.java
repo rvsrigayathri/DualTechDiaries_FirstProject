@@ -22,8 +22,7 @@ public class Profile {
 
     private String targetTemplate;
 
-    @Lob
-    @Column(columnDefinition = "CLOB")
+    @Column(columnDefinition = "TEXT")
     private String resumeJson;
 
     private LocalDateTime createdAt;
