@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Spring Data JPA Repository for Profile entities.
+ * Spring Data JPA Repository for Profile entities with user isolation.
  */
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
@@ -20,4 +20,15 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     List<Profile> findByEmailOrderByUpdatedAtDesc(String email);
 
     List<Profile> findAllByOrderByUpdatedAtDesc();
+
+    // User-specific queries
+    List<Profile> findByUserIdOrderByUpdatedAtDesc(Long userId);
+
+    Optional<Profile> findTopByUserIdOrderByUpdatedAtDesc(Long userId);
+
+    Optional<Profile> findByIdAndUserId(Long id, Long userId);
+
+    boolean existsByIdAndUserId(Long id, Long userId);
+
+    void deleteByIdAndUserId(Long id, Long userId);
 }

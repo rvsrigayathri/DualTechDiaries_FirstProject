@@ -7,10 +7,11 @@ import TopBar from './TopBar'
  * Props:
  *   activeSection  – string
  *   onNavigate     – (id: string) => void
+ *   onGoDashboard  – () => void
  *   healthProps    – { status, loading, error }
  *   children       – main content
  */
-export default function Layout({ activeSection, onNavigate, healthProps, children }) {
+export default function Layout({ activeSection, onNavigate, onGoDashboard, healthProps, children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -26,13 +27,17 @@ export default function Layout({ activeSection, onNavigate, healthProps, childre
         <SideNav
           activeSection={activeSection}
           onNavigate={(id) => { onNavigate(id); setMobileOpen(false) }}
+          onGoDashboard={onGoDashboard}
           healthProps={healthProps}
         />
       </div>
 
       {/* Main */}
       <div className="main-area">
-        <TopBar onMenuToggle={() => setMobileOpen(o => !o)} />
+        <TopBar
+          onMenuToggle={() => setMobileOpen(o => !o)}
+          onGoDashboard={onGoDashboard}
+        />
         {children}
       </div>
     </div>

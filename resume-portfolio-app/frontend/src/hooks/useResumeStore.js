@@ -231,6 +231,20 @@ export function useResumeStore() {
     setData(defaultState())
   }
 
+  const loadResume = (loadedData) => {
+    const def = defaultState()
+    const merged = {
+      ...def,
+      ...loadedData,
+      settings: {
+        ...def.settings,
+        ...(loadedData.settings || {})
+      }
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+    setData(merged)
+  }
+
   return {
     data, lastSaved, saveToast, autoSaving,
     updatePersonal, updateCareer,
@@ -240,6 +254,6 @@ export function useResumeStore() {
     addArrayItem, updateArrayItem, removeArrayItem,
     addInterest, removeInterest,
     updateSettings, toggleSection,
-    saveDraft, clearDraft
+    saveDraft, clearDraft, loadResume
   }
 }

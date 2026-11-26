@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import HealthStatus from '../HealthStatus'
+import { useAuth } from '../../context/AuthContext'
 
 const NAV_ITEMS = [
   { id: 'personal',      icon: '👤', label: 'Personal Info' },
@@ -12,13 +13,26 @@ const NAV_ITEMS = [
   { id: 'preview',       icon: '👁', label: 'Live Preview' },
 ]
 
-export default function SideNav({ activeSection, onNavigate, healthProps }) {
+export default function SideNav({ activeSection, onNavigate, onGoDashboard, healthProps }) {
+  const { user, logout } = useAuth()
+
   return (
     <aside className="sidebar">
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="sidebar-logo-text">ResumeCraft</div>
         <div className="sidebar-logo-sub">Professional Resume Builder</div>
+      </div>
+
+      {/* Dashboard Shortcut */}
+      <div className="sidebar-dashboard-link-container">
+        <button
+          type="button"
+          className="btn-dashboard-back"
+          onClick={onGoDashboard}
+        >
+          <span>←</span> Back to Dashboard
+        </button>
       </div>
 
       {/* Navigation */}
@@ -37,8 +51,24 @@ export default function SideNav({ activeSection, onNavigate, healthProps }) {
         ))}
       </nav>
 
-      {/* Backend health */}
+      {/* User profile & backend health */}
       <div className="sidebar-footer">
+        {user && (
+          <div className="sidebar-user-block">
+            <div className="sidebar-user-info">
+              <span className="sidebar-user-name">{user.fullName || 'User'}</span>
+              <span className="sidebar-user-email">{user.email || ''}</span>
+            </div>
+            <button
+              type="button"
+              className="sidebar-logout-btn"
+              onClick={logout}
+              title="Log out"
+            >
+              Logout
+            </button>
+          </div>
+        )}
         <SidebarHealth {...healthProps} />
       </div>
     </aside>

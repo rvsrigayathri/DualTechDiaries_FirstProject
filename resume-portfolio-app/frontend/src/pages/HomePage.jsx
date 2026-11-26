@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchHealth } from '../api/health'
+import { fetchResumeById } from '../api/resume'
 import { useResumeStore } from '../hooks/useResumeStore'
 import { useValidation } from '../hooks/useValidation'
 
@@ -20,7 +21,7 @@ const SECTION_IDS = [
   'experience', 'additional', 'templates', 'preview'
 ]
 
-export default function HomePage() {
+export default function HomePage({ onGoDashboard, resumeIdToLoad, initialMobileTab }) {
   // ── Backend health ────────────────────────────────────────
   const [healthStatus, setHealthStatus] = useState('')
   const [healthLoading, setHealthLoading] = useState(true)
@@ -34,7 +35,18 @@ export default function HomePage() {
 
   // ── Resume store ──────────────────────────────────────────
   const store = useResumeStore()
-  const { data, saveToast, autoSaving, lastSaved, saveDraft, clearDraft } = store
+  const { data, saveToast, autoSaving, lastSaved, saveDraft, clearDraft, loadResume } = store
+
+  // Load specific resume if requested
+  useEffect(() => {
+    if (resumeIdToLoad) {
+      fetchResumeById(resumeIdToLoad)
+        .then(loaded => {
+          if (loaded) loadResume(loaded)
+        })
+        .catch(err => console.warn('Failed to load resume by ID:', err))
+    }
+  }, [resumeIdToLoad])
 
   // ── Validation ────────────────────────────────────────────
   const { getError, touch, touchAll, isFormValid } = useValidation(data)
@@ -62,7 +74,7 @@ export default function HomePage() {
 
   // ── Mobile preview tab (shown on screens ≤ 1100px) ───────
   // 'form' | 'preview'
-  const [mobileTab, setMobileTab] = useState('form')
+  const [mobileTab, setMobileTab] = useState(initialMobileTab || 'form')
 
   // ── Settings shorthand ────────────────────────────────────
   const updateSettings = (field, value) => store.updateSettings(field, value)
@@ -71,6 +83,7 @@ export default function HomePage() {
     <Layout
       activeSection={activeSection}
       onNavigate={navigateTo}
+      onGoDashboard={onGoDashboard}
       healthProps={{ status: healthStatus, loading: healthLoading, error: healthError }}
     >
       {/* ── Mobile tab switcher (hidden on wide screens via CSS) ── */}
