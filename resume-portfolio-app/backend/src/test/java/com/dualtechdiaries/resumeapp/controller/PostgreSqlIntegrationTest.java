@@ -1,5 +1,7 @@
 package com.dualtechdiaries.resumeapp.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,7 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +35,8 @@ class PostgreSqlIntegrationTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Test
     void postgreSqlSchemaAndEndpoints_createTableAndPersistResumeSuccessfully() throws Exception {
         // 1. Verify that 'profiles' table exists in the database
@@ -40,30 +46,65 @@ class PostgreSqlIntegrationTest {
         );
         assertTrue(count != null && count > 0, "The 'profiles' table must exist in the PostgreSQL-compatible schema");
 
-        // 2. Test POST /api/resume/save against PostgreSQL schema
-        String payload = """
+        // 2. Test POST /api/resume/save against PostgreSQL schema (First save)
+        String payload1 = """
             {
               "fullName": "Elena Rostova",
               "email": "elena.rostova@example.com",
               "desiredRole": "Senior Cloud Architect",
               "targetTemplate": "modern_executive",
-              "resumeJson": "{\\"personal\\":{\\"fullName\\":\\"Elena Rostova\\",\\"summary\\":\\"Cloud Native Infrastructure Architect\\"}}"
+              "resumeJson": "{\\"personal\\":{\\"fullName\\":\\"Elena Rostova\\",\\"photoUrl\\":\\"data:image/png;base64,iVBORw0KGgo...\\",\\"summary\\":\\"Cloud Native Infrastructure Architect\\"}}"
             }
             """;
 
-        mockMvc.perform(post("/api/resume/save")
+        MvcResult result1 = mockMvc.perform(post("/api/resume/save")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(payload))
+                .content(payload1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("saved"))
-                .andExpect(jsonPath("$.id").exists());
+                .andExpect(jsonPath("$.id").exists())
+                .andReturn();
 
-        // 3. Test GET /api/resume/latest against PostgreSQL schema
-        mockMvc.perform(get("/api/resume/latest"))
+        JsonNode json1 = objectMapper.readTree(result1.getResponse().getContentAsString());
+        long assignedId = json1.get("id").asLong();
+
+        // 3. Second save updates the existing record, keeping assignedId
+        String payload2 = String.format("""
+            {
+              "id": %d,
+              "fullName": "Elena Rostova",
+              "email": "elena.rostova@example.com",
+              "desiredRole": "Principal Cloud Architect",
+              "targetTemplate": "modern_executive",
+              "resumeJson": "{\\"personal\\":{\\"fullName\\":\\"Elena Rostova\\",\\"photoUrl\\":\\"data:image/png;base64,iVBORw0KGgo...\\",\\"summary\\":\\"Enterprise Cloud Leader\\"}}"
+            }
+            """, assignedId);
+
+        mockMvc.perform(post("/api/resume/save")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload2))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("saved"))
+                .andExpect(jsonPath("$.id").value(assignedId));
+
+        // 4. Verify total rows in PostgreSQL remains 1
+        Integer totalRows = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM profiles",
+                Integer.class
+        );
+        assertEquals(1, totalRows, "Profiles table must have exactly 1 record after updating existing resume");
+
+        // 5. Test GET /api/resume/latest against PostgreSQL schema
+        MvcResult latestResult = mockMvc.perform(get("/api/resume/latest"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(assignedId))
                 .andExpect(jsonPath("$.fullName").value("Elena Rostova"))
-                .andExpect(jsonPath("$.desiredRole").value("Senior Cloud Architect"))
+                .andExpect(jsonPath("$.desiredRole").value("Principal Cloud Architect"))
                 .andExpect(jsonPath("$.targetTemplate").value("modern_executive"))
-                .andExpect(jsonPath("$.resumeJson").value("{\"personal\":{\"fullName\":\"Elena Rostova\",\"summary\":\"Cloud Native Infrastructure Architect\"}}"));
+                .andReturn();
+
+        JsonNode latestJson = objectMapper.readTree(latestResult.getResponse().getContentAsString());
+        String resumeJsonStr = latestJson.get("resumeJson").asText();
+        assertTrue(resumeJsonStr.contains("data:image/png;base64"), "Photo URL data must be preserved in resumeJson");
     }
 }

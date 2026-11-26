@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { saveResumeToBackend } from '../api/resume'
+import { saveResumeToBackend, clearStoredBackendId } from '../api/resume'
 
 const STORAGE_KEY = 'resumecraft_draft_v2'
 
@@ -89,7 +89,10 @@ export function useResumeStore() {
         const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         setLastSaved(t)
         try {
-          await saveResumeToBackend(data)
+          const res = await saveResumeToBackend(data)
+          if (res?.id && data._backendId !== res.id) {
+            setData(d => ({ ...d, _backendId: res.id }))
+          }
         } catch { /* backend offline fallback */ }
       } catch (e) {
         console.error('Auto-save failed', e)
@@ -212,7 +215,10 @@ export function useResumeStore() {
       setSaveToast(true)
       setTimeout(() => setSaveToast(false), 3000)
       try {
-        await saveResumeToBackend(data)
+        const res = await saveResumeToBackend(data)
+        if (res?.id && data._backendId !== res.id) {
+          setData(d => ({ ...d, _backendId: res.id }))
+        }
       } catch { /* backend offline fallback */ }
     } catch (e) {
       console.error('Save failed', e)
@@ -221,6 +227,7 @@ export function useResumeStore() {
 
   const clearDraft = () => {
     localStorage.removeItem(STORAGE_KEY)
+    clearStoredBackendId()
     setData(defaultState())
   }
 

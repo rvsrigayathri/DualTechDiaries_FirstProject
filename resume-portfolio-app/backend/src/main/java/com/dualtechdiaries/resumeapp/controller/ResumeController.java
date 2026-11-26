@@ -50,19 +50,44 @@ public class ResumeController {
 
     /**
      * POST /api/resume/save - Saves or updates a resume profile.
-     * Supports both /api/resume/save and /api/resume/save/
+     * Updates an existing record if one exists, keeping the database record ID constant.
+     * Creates a new record only when no resume exists in the database.
+     * Preserves all fields, template customization, and profile photo data.
      */
     @PostMapping({"/save", "/save/"})
     public ResponseEntity<Map<String, Object>> saveResume(@RequestBody SaveResumeRequest request) {
-        Profile profile;
+        Profile profile = null;
 
+        // 1. If explicit record ID is provided and exists, update that record
         if (request.id != null && profileRepository.existsById(request.id)) {
-            profile = profileRepository.findById(request.id).get();
-        } else {
+            profile = profileRepository.findById(request.id).orElse(null);
+        }
+
+        // 2. If not found by ID, look up by email if provided
+        if (profile == null && request.email != null && !request.email.trim().isEmpty()) {
+            List<Profile> byEmail = profileRepository.findByEmailOrderByUpdatedAtDesc(request.email.trim());
+            if (!byEmail.isEmpty()) {
+                profile = byEmail.get(0);
+            }
+        }
+
+        // 3. If still not found, check if ANY resume record exists in the database to update
+        if (profile == null) {
+            Optional<Profile> latest = profileRepository.findTopByOrderByUpdatedAtDesc();
+            if (latest.isEmpty()) {
+                latest = profileRepository.findTopByOrderByIdDesc();
+            }
+            if (latest.isPresent()) {
+                profile = latest.get();
+            }
+        }
+
+        // 4. Create a new record ONLY when no resume exists at all
+        if (profile == null) {
             profile = new Profile();
         }
 
-        profile.setFullName(request.fullName != null ? request.fullName : "Untitled Resume");
+        profile.setFullName(request.fullName != null && !request.fullName.trim().isEmpty() ? request.fullName : "Untitled Resume");
         profile.setEmail(request.email);
         profile.setDesiredRole(request.desiredRole);
         profile.setTargetTemplate(request.targetTemplate);
