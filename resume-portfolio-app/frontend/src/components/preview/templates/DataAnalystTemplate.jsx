@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 5. Data Analyst Template
@@ -8,11 +8,16 @@ export default function DataAnalystTemplate({
   data,
   accentColor = '#0d9488',
   secondaryColor = '#134e4a',
-  fontFamily = 'Inter'
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
 
@@ -28,15 +33,26 @@ export default function DataAnalystTemplate({
     <div className="rt-data-analyst" style={{ fontFamily: ff }}>
       {/* Header */}
       <div className="rt-da-header">
-        <div className="rt-da-header-left">
-          <h1 className="rt-da-name" style={{ color: secondaryColor || '#134e4a' }}>
-            {personal.fullName || 'Data Analyst'}
-          </h1>
-          {career.desiredRole && (
-            <div className="rt-da-role" style={{ color: accentColor }}>
-              {career.desiredRole}
-            </div>
+        <div className="rt-da-header-left" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {isPhotoVisible && personal.photoUrl && (
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={58}
+              border={`2px solid ${accentColor}`}
+            />
           )}
+          <div>
+            <h1 className="rt-da-name" style={{ color: secondaryColor || '#134e4a' }}>
+              {personal.fullName || 'Data Analyst'}
+            </h1>
+            {career.desiredRole && (
+              <div className="rt-da-role" style={{ color: accentColor }}>
+                {career.desiredRole}
+              </div>
+            )}
+          </div>
         </div>
         <div className="rt-da-header-right">
           {personal.email && <div>✉ {personal.email}</div>}

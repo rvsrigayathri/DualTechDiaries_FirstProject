@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 12. Premium Corporate Template
@@ -9,11 +9,16 @@ export default function PremiumCorporateTemplate({
   data,
   accentColor = '#881337',
   secondaryColor = '#4c0519',
-  fontFamily = 'Georgia'
+  fontFamily = 'Georgia',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Inter' ? 'Inter, sans-serif' : 'Georgia, serif'
   const allSkills = [
@@ -30,17 +35,28 @@ export default function PremiumCorporateTemplate({
       {/* Corporate Letterhead Header */}
       <header className="rt-prem-header">
         <div className="rt-prem-top-bar" style={{ background: accentColor }} />
-        <div className="rt-prem-header-content">
-          <h1 className="rt-prem-name" style={{ color: secondaryColor }}>{personal.fullName || 'Corporate Executive'}</h1>
-          {career.desiredRole && <div className="rt-prem-role" style={{ color: accentColor }}>{career.desiredRole}</div>}
-          <div className="rt-prem-contact">
-            {[
-              personal.location,
-              personal.email,
-              personal.phone ? `${personal.countryCode} ${personal.phone}` : '',
-              personal.linkedin,
-              personal.portfolio
-            ].filter(Boolean).join('  ◆  ')}
+        <div className="rt-prem-header-content" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+          {isPhotoVisible && personal.photoUrl && (
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={66}
+              border={`2.5px solid ${accentColor}`}
+            />
+          )}
+          <div style={{ flex: 1 }}>
+            <h1 className="rt-prem-name" style={{ color: secondaryColor }}>{personal.fullName || 'Corporate Executive'}</h1>
+            {career.desiredRole && <div className="rt-prem-role" style={{ color: accentColor }}>{career.desiredRole}</div>}
+            <div className="rt-prem-contact">
+              {[
+                personal.location,
+                personal.email,
+                personal.phone ? `${personal.countryCode} ${personal.phone}` : '',
+                personal.linkedin,
+                personal.portfolio
+              ].filter(Boolean).join('  ◆  ')}
+            </div>
           </div>
         </div>
       </header>

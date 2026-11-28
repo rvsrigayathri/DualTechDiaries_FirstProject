@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 7. Graduate Fresher Template
@@ -9,11 +9,16 @@ export default function GraduateFresherTemplate({
   data,
   accentColor = '#3b82f6',
   secondaryColor = '#1d4ed8',
-  fontFamily = 'Inter'
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
   const allSkills = [
@@ -28,6 +33,17 @@ export default function GraduateFresherTemplate({
     <div className="rt-fresher" style={{ fontFamily: ff }}>
       {/* Header */}
       <div className="rt-fresher-header">
+        {isPhotoVisible && personal.photoUrl && (
+          <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center' }}>
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={64}
+              border={`2px solid ${accentColor}`}
+            />
+          </div>
+        )}
         <h1 className="rt-fresher-name" style={{ color: secondaryColor }}>{personal.fullName || 'Graduate Name'}</h1>
         {career.desiredRole && <div className="rt-fresher-role" style={{ color: accentColor }}>{career.desiredRole}</div>}
         <div className="rt-fresher-contact">

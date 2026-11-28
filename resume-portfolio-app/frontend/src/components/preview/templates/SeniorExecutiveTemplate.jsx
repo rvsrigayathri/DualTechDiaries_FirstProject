@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 8. Senior Executive Template
@@ -9,11 +9,16 @@ export default function SeniorExecutiveTemplate({
   data,
   accentColor = '#4338ca',
   secondaryColor = '#312e81',
-  fontFamily = 'Georgia'
+  fontFamily = 'Georgia',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Inter' ? 'Inter, sans-serif' : 'Georgia, serif'
   const leadershipSkills = [
@@ -26,6 +31,17 @@ export default function SeniorExecutiveTemplate({
     <div className="rt-sr-exec" style={{ fontFamily: ff }}>
       {/* Executive Letterhead Header */}
       <header className="rt-sr-exec-head">
+        {isPhotoVisible && personal.photoUrl && (
+          <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}>
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={68}
+              border={`2.5px solid ${accentColor}`}
+            />
+          </div>
+        )}
         <h1 className="rt-sr-exec-name">{personal.fullName || 'Executive Candidate'}</h1>
         {career.desiredRole && <div className="rt-sr-exec-role" style={{ color: accentColor }}>{career.desiredRole}</div>}
         <div className="rt-sr-exec-contact">

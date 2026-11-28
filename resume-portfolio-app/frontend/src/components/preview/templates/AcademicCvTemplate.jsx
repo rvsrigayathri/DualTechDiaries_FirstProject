@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 6. Academic CV Template
@@ -8,11 +8,16 @@ export default function AcademicCvTemplate({
   data,
   accentColor = '#374151',
   secondaryColor = '#1f2937',
-  fontFamily = 'Georgia'
+  fontFamily = 'Georgia',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Inter' ? 'Inter, sans-serif' : 'Georgia, serif'
 
@@ -20,6 +25,17 @@ export default function AcademicCvTemplate({
     <div className="rt-academic" style={{ fontFamily: ff }}>
       {/* Centered Academic Header */}
       <div className="rt-acad-header">
+        {isPhotoVisible && personal.photoUrl && (
+          <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}>
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={64}
+              border="2px solid #9ca3af"
+            />
+          </div>
+        )}
         <h1 className="rt-acad-name">{personal.fullName || 'Curriculum Vitae'}</h1>
         {career.desiredRole && <div className="rt-acad-role">{career.desiredRole}</div>}
         <div className="rt-acad-contact">

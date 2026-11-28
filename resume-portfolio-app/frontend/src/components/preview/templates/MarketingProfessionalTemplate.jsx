@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 9. Marketing Professional Template
@@ -8,11 +8,16 @@ export default function MarketingProfessionalTemplate({
   data,
   accentColor = '#f97316',
   secondaryColor = '#c2410c',
-  fontFamily = 'Inter'
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
   const allSkills = [
@@ -26,9 +31,20 @@ export default function MarketingProfessionalTemplate({
     <div className="rt-marketing" style={{ fontFamily: ff }}>
       {/* Vibrant Marketing Header */}
       <div className="rt-mkt-banner" style={{ background: `linear-gradient(90deg, ${secondaryColor}, ${accentColor})` }}>
-        <div className="rt-mkt-banner-left">
-          <h1 className="rt-mkt-name">{personal.fullName || 'Marketer'}</h1>
-          <div className="rt-mkt-role">{career.desiredRole || 'Growth & Marketing Lead'}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {isPhotoVisible && personal.photoUrl && (
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={64}
+              border="2.5px solid rgba(255,255,255,0.7)"
+            />
+          )}
+          <div className="rt-mkt-banner-left">
+            <h1 className="rt-mkt-name">{personal.fullName || 'Marketer'}</h1>
+            <div className="rt-mkt-role">{career.desiredRole || 'Growth & Marketing Lead'}</div>
+          </div>
         </div>
         <div className="rt-mkt-banner-right">
           {personal.email && <div>✉ {personal.email}</div>}

@@ -4,6 +4,8 @@
  * avatar centred, sidebar scales with content.
  */
 
+import { ProfilePhoto } from './shared/TemplateHelpers'
+
 function ExpEntry({ e }) {
   const orgLine  = [e.company, e.location].filter(Boolean).join(' · ')
   const dateRange = [e.startDate, e.current ? 'Present' : e.endDate]
@@ -32,16 +34,27 @@ export default function ModernTemplate({ data, accentColor = '#2457d6', fontFami
     ...skills.databases, ...skills.tools
   ]
 
+  const isPhotoVisible = settings?.showPhoto !== false
+  const photoShape = settings?.photoShape || 'circle'
+
   return (
     <div className="rt-modern" style={{ fontFamily: ff }}>
       {/* ── Sidebar ── */}
       <div className="rt-modern-sidebar" style={{ background: accentColor }}>
         {/* Avatar */}
-        <div className="rt-modern-avatar">
-          {personal.photoUrl
-            ? <img src={personal.photoUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Profile" />
-            : '👤'}
-        </div>
+        {isPhotoVisible && personal.photoUrl ? (
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              size={72}
+              shape={photoShape}
+              border="2px solid rgba(255,255,255,0.4)"
+            />
+          </div>
+        ) : (
+          <div className="rt-modern-avatar">👤</div>
+        )}
         <div className="rt-modern-name">{personal.fullName || 'Your Name'}</div>
         {career.desiredRole && <div className="rt-modern-role">{career.desiredRole}</div>}
 

@@ -3,6 +3,8 @@
  * Improved: clearer experience layout, no null/empty renders, tighter spacing.
  */
 
+import { ProfilePhoto } from './shared/TemplateHelpers'
+
 function ExpEntry({ e }) {
   const orgLine  = [e.company, e.location].filter(Boolean).join(' · ')
   const dateRange = [e.startDate, e.current ? 'Present' : e.endDate]
@@ -34,15 +36,26 @@ export default function CreativeTemplate({ data, accentColor = '#2457d6', fontFa
     <div className="rt-creative-sec-h" style={{ color: accentColor }}>{children}</div>
   )
 
+  const isPhotoVisible = settings?.showPhoto !== false
+  const photoShape = settings?.photoShape || 'circle'
+
   return (
     <div className="rt-creative" style={{ fontFamily: ff }}>
       {/* Header */}
       <div className="rt-creative-header" style={{ background: accentColor }}>
-        <div className="rt-creative-avatar">
-          {personal.photoUrl
-            ? <img src={personal.photoUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Profile" />
-            : '👤'}
-        </div>
+        {isPhotoVisible && personal.photoUrl ? (
+          <div style={{ flexShrink: 0 }}>
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              size={68}
+              shape={photoShape}
+              border="2px solid rgba(255,255,255,0.4)"
+            />
+          </div>
+        ) : (
+          <div className="rt-creative-avatar">👤</div>
+        )}
         <div>
           <div className="rt-creative-name">{personal.fullName || 'Your Name'}</div>
           {career.desiredRole && <div className="rt-creative-role">{career.desiredRole}</div>}

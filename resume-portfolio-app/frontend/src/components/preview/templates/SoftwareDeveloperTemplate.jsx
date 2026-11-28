@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 4. Software Developer Template
@@ -9,11 +9,16 @@ export default function SoftwareDeveloperTemplate({
   data,
   accentColor = '#2563eb',
   secondaryColor = '#1e293b',
-  fontFamily = 'Inter'
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
 
@@ -31,9 +36,22 @@ export default function SoftwareDeveloperTemplate({
       {/* ── Top Header ── */}
       <header className="rt-dev-header" style={{ borderTop: `4px solid ${accentColor}` }}>
         <div className="rt-dev-header-left">
-          <h1 className="rt-dev-name">{personal.fullName || 'Developer Name'}</h1>
-          <div className="rt-dev-role" style={{ color: accentColor }}>
-            &lt;{career.desiredRole || 'Software Engineer'} /&gt;
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            {isPhotoVisible && personal.photoUrl && (
+              <ProfilePhoto
+                photoUrl={personal.photoUrl}
+                fullName={personal.fullName}
+                shape={shape}
+                size={58}
+                border={`2px solid ${accentColor}`}
+              />
+            )}
+            <div>
+              <h1 className="rt-dev-name">{personal.fullName || 'Developer Name'}</h1>
+              <div className="rt-dev-role" style={{ color: accentColor }}>
+                &lt;{career.desiredRole || 'Software Engineer'} /&gt;
+              </div>
+            </div>
           </div>
         </div>
         <div className="rt-dev-header-right">

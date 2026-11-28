@@ -1,3 +1,5 @@
+import { ProfilePhoto } from './shared/TemplateHelpers'
+
 /**
  * ATS-Friendly Template — clean single-column, maximally parseable.
  * Improved: clearer experience layout, no null/empty renders, tighter A4 spacing.
@@ -19,9 +21,23 @@ export default function AtsTemplate({ data, accentColor, fontFamily = 'Inter' })
     'Soft Skills': skills.soft
   }
 
+  const isPhotoVisible = settings?.showPhoto === true
+  const photoShape = settings?.photoShape || 'circle'
+
   return (
     <div className="rt-ats" style={{ fontFamily: ff }}>
       {/* Header */}
+      {isPhotoVisible && personal.photoUrl && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+          <ProfilePhoto
+            photoUrl={personal.photoUrl}
+            fullName={personal.fullName}
+            size={64}
+            shape={photoShape}
+            border="2px solid #cbd5e1"
+          />
+        </div>
+      )}
       <div className="rt-ats-name">{personal.fullName || 'Your Name'}</div>
       {career.desiredRole && <div className="rt-ats-role">{career.desiredRole}</div>}
       <div className="rt-ats-contact">

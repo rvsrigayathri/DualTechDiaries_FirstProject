@@ -1,4 +1,4 @@
-import { cleanUrl } from './TemplateHelpers'
+import { cleanUrl, ProfilePhoto } from './TemplateHelpers'
 
 /**
  * Reusable Resume Header Component.
@@ -12,6 +12,8 @@ export default function TemplateHeader({
   personal = {},
   career = {},
   variant = 'centered',
+  showPhoto = true,
+  photoShape = 'circle',
   accentColor,
   secondaryColor,
   className = ''
@@ -43,8 +45,16 @@ export default function TemplateHeader({
   if (variant === 'split') {
     return (
       <header className={`rt-shared-header header-split ${className}`}>
-        <div className="rt-header-main">
-          {photoUrl && <img src={photoUrl} alt={fullName} className="rt-header-photo" />}
+        <div className="rt-header-main" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {showPhoto && photoUrl && (
+            <ProfilePhoto
+              photoUrl={photoUrl}
+              fullName={fullName}
+              shape={photoShape}
+              size={60}
+              border={`2px solid ${accentColor || '#2457d6'}`}
+            />
+          )}
           <div>
             <h1 className="rt-header-name" style={accentColor ? { color: accentColor } : undefined}>
               {fullName}
@@ -70,9 +80,15 @@ export default function TemplateHeader({
         className={`rt-shared-header header-banner ${className}`}
         style={{ background: `linear-gradient(135deg, ${secondaryColor || accentColor}, ${accentColor})` }}
       >
-        <div className="rt-banner-inner">
-          {photoUrl ? (
-            <img src={photoUrl} alt={fullName} className="rt-banner-avatar" />
+        <div className="rt-banner-inner" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {showPhoto && photoUrl ? (
+            <ProfilePhoto
+              photoUrl={photoUrl}
+              fullName={fullName}
+              shape={photoShape}
+              size={64}
+              border="2px solid rgba(255,255,255,0.6)"
+            />
           ) : (
             <div className="rt-banner-avatar-fallback">👤</div>
           )}
@@ -95,6 +111,17 @@ export default function TemplateHeader({
   // Default 'centered'
   return (
     <header className={`rt-shared-header header-centered ${className}`}>
+      {showPhoto && photoUrl && (
+        <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center' }}>
+          <ProfilePhoto
+            photoUrl={photoUrl}
+            fullName={fullName}
+            shape={photoShape}
+            size={64}
+            border={`2px solid ${accentColor || '#374151'}`}
+          />
+        </div>
+      )}
       <h1 className="rt-header-name" style={accentColor ? { color: accentColor } : undefined}>
         {fullName}
       </h1>

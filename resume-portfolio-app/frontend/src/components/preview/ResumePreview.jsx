@@ -159,7 +159,47 @@ export default function ResumePreview({ data, onUpdateSettings }) {
           </button>
         </div>
 
-        {/* Row 3: Section Visibility Toggles */}
+        {/* Row 3: Profile Photo Visibility & Shape */}
+        <div className="preview-controls-row">
+          <span className="preview-controls-label">Photo</span>
+          <div className="photo-controls-group">
+            <button
+              type="button"
+              className={`visibility-pill${settings.showPhoto !== false ? ' visible' : ''}`}
+              onClick={() => onUpdateSettings('showPhoto', settings.showPhoto === false ? true : false)}
+              title={settings.showPhoto !== false ? 'Hide profile photo from resume' : 'Show profile photo on resume'}
+            >
+              <span>{settings.showPhoto !== false ? '📷' : '🚫'}</span>
+              {settings.showPhoto !== false ? 'Photo: Shown' : 'Photo: Hidden'}
+            </button>
+
+            <span className="preview-controls-label" style={{ marginLeft: 10 }}>Shape</span>
+            <div className="photo-shape-pills">
+              {[
+                { value: 'circle', label: '◯ Circle' },
+                { value: 'rounded', label: '▢ Rounded' },
+                { value: 'square', label: '⏹ Square' }
+              ].map(sh => (
+                <button
+                  key={sh.value}
+                  type="button"
+                  className={`shape-pill${(settings.photoShape || 'circle') === sh.value ? ' active' : ''}`}
+                  onClick={() => onUpdateSettings('photoShape', sh.value)}
+                >
+                  {sh.label}
+                </button>
+              ))}
+            </div>
+
+            {!data?.personal?.photoUrl && (
+              <span className="photo-hint-text">
+                (Upload photo in Personal Info to display)
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Row 4: Section Visibility Toggles */}
         <div className="preview-controls-row">
           <span className="preview-controls-label">Sections</span>
           <div className="visibility-grid">
@@ -212,6 +252,8 @@ export default function ResumePreview({ data, onUpdateSettings }) {
             fontSize={settings.fontSize || 'medium'}
             sectionSpacing={settings.sectionSpacing || 'normal'}
             sidebarPosition={settings.sidebarPosition || 'left'}
+            showPhoto={settings.showPhoto !== false}
+            photoShape={settings.photoShape || 'circle'}
           />
         </div>
       </div>

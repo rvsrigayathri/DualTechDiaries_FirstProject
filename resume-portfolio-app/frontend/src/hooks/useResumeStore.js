@@ -44,6 +44,8 @@ function defaultState() {
       fontSize: 'medium',
       sectionSpacing: 'normal',
       sidebarPosition: 'left',
+      showPhoto: true,
+      photoShape: 'circle',
       hiddenSections: []
     }
   }

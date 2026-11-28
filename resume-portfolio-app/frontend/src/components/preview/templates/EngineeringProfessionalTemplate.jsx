@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 10. Engineering Professional Template
@@ -9,11 +9,16 @@ export default function EngineeringProfessionalTemplate({
   data,
   accentColor = '#0284c7',
   secondaryColor = '#0369a1',
-  fontFamily = 'Inter'
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
   const engineeringSkills = [
@@ -27,9 +32,20 @@ export default function EngineeringProfessionalTemplate({
     <div className="rt-eng" style={{ fontFamily: ff }}>
       {/* Header */}
       <div className="rt-eng-header" style={{ borderLeft: `6px solid ${accentColor}` }}>
-        <div className="rt-eng-title-group">
-          <h1 className="rt-eng-name">{personal.fullName || 'Engineer Name'}</h1>
-          {career.desiredRole && <div className="rt-eng-role" style={{ color: accentColor }}>{career.desiredRole}</div>}
+        <div className="rt-eng-title-group" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {isPhotoVisible && personal.photoUrl && (
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={58}
+              border={`2px solid ${accentColor}`}
+            />
+          )}
+          <div>
+            <h1 className="rt-eng-name">{personal.fullName || 'Engineer Name'}</h1>
+            {career.desiredRole && <div className="rt-eng-role" style={{ color: accentColor }}>{career.desiredRole}</div>}
+          </div>
         </div>
         <div className="rt-eng-contact-block">
           {personal.email && <div>✉ {personal.email}</div>}

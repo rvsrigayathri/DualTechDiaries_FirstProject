@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 3. Creative Designer Template
@@ -8,11 +8,16 @@ export default function CreativeDesignerTemplate({
   data,
   accentColor = '#ec4899',
   secondaryColor = '#831843',
-  fontFamily = 'Inter'
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
   const allSkills = [
@@ -27,8 +32,14 @@ export default function CreativeDesignerTemplate({
       {/* ── Bold Creative Header ── */}
       <header className="rt-c-des-header" style={{ background: `linear-gradient(135deg, ${accentColor}, ${secondaryColor || '#4c0519'})` }}>
         <div className="rt-c-des-header-inner">
-          {personal.photoUrl ? (
-            <img src={personal.photoUrl} alt="Designer" className="rt-c-des-avatar" />
+          {isPhotoVisible && personal.photoUrl ? (
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={64}
+              border="2.5px solid rgba(255,255,255,0.7)"
+            />
           ) : (
             <div className="rt-c-des-avatar-fallback">🎨</div>
           )}

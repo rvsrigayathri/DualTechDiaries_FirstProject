@@ -163,3 +163,61 @@ export function SkillBadgeGroup({ label, skills = [], variant = 'chip', accentCo
     </div>
   )
 }
+
+/**
+ * Reusable, responsive Profile Photo component.
+ * Features:
+ * - Preserves aspect ratio with object-fit: cover and center alignment
+ * - Supports circular ('circle'), rounded rectangle ('rounded'), and square ('square') shapes
+ * - Synchronous eager decoding for flawless PDF print cloning
+ * - Customizable size, borders, and shadows
+ */
+export function ProfilePhoto({
+  photoUrl,
+  fullName = 'Profile Photo',
+  size = 64,
+  shape = 'circle',
+  className = '',
+  border = '2px solid rgba(255,255,255,0.4)',
+  style = {}
+}) {
+  if (!photoUrl) return null
+
+  const borderRadius =
+    shape === 'square' ? '2px' :
+    shape === 'rounded' ? '8px' : '50%'
+
+  return (
+    <div
+      className={`rt-photo-frame ${className}`}
+      style={{
+        width: size,
+        height: size,
+        minWidth: size,
+        minHeight: size,
+        borderRadius,
+        border,
+        overflow: 'hidden',
+        display: 'inline-block',
+        flexShrink: 0,
+        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+        backgroundColor: '#f1f5f9',
+        ...style
+      }}
+    >
+      <img
+        src={photoUrl}
+        alt={fullName}
+        loading="eager"
+        decoding="sync"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center',
+          display: 'block'
+        }}
+      />
+    </div>
+  )
+}

@@ -3,6 +3,8 @@
  * Improved: tighter spacing, clearer experience layout, no null/empty renders.
  */
 
+import { ProfilePhoto } from './shared/TemplateHelpers'
+
 /** Render an experience entry with clear hierarchy */
 function ExpEntry({ e, accent }) {
   const orgLine = [e.company, e.location].filter(Boolean).join(' · ')
@@ -47,12 +49,23 @@ export default function ClassicTemplate({ data, accentColor = '#2457d6', fontFam
 
   const style = { fontFamily: fontFamily === 'Georgia' ? 'Georgia, serif' : fontFamily + ', sans-serif' }
 
+  const isPhotoVisible = settings?.showPhoto !== false
+  const photoShape = settings?.photoShape || 'circle'
+
   return (
     <div className="rt-classic" style={style}>
       {/* Header */}
       <div className="rt-classic-header" style={{ borderBottomColor: accent }}>
-        {personal.photoUrl && (
-          <img src={personal.photoUrl} className="rt-photo" alt="Profile" />
+        {isPhotoVisible && personal.photoUrl && (
+          <div style={{ float: 'right', marginLeft: 16, marginBottom: 8 }}>
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              size={64}
+              shape={photoShape}
+              border={`2px solid ${accent}40`}
+            />
+          </div>
         )}
         <div className="rt-classic-name" style={{ color: accent }}>{name}</div>
         {role && <div className="rt-classic-role">{role}</div>}

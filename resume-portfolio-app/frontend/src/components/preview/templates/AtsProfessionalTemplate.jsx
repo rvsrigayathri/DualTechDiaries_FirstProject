@@ -1,14 +1,24 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry, formatDateRange } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, formatDateRange, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 1. ATS Professional Template
  * Ultra-clean, single-column, strictly linear structure designed for optimal ATS parsing.
  * High contrast, standard dividers, tabular alignment.
  */
-export default function AtsProfessionalTemplate({ data, accentColor = '#111827', fontFamily = 'Inter' }) {
+export default function AtsProfessionalTemplate({
+  data,
+  accentColor = '#111827',
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
+}) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  // ATS templates default to photo hidden for parsing compliance, but respect explicit user toggle
+  const isPhotoVisible = showPhoto === true || (settings?.showPhoto === true)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
   const contactParts = [
@@ -32,13 +42,24 @@ export default function AtsProfessionalTemplate({ data, accentColor = '#111827',
   return (
     <div className="rt-ats-pro" style={{ fontFamily: ff }}>
       {/* Header */}
-      <div className="rt-ats-pro-header">
-        <h1 className="rt-ats-pro-name">{personal.fullName || 'Your Name'}</h1>
-        {career.desiredRole && <div className="rt-ats-pro-role">{career.desiredRole}</div>}
-        {contactParts.length > 0 && (
-          <div className="rt-ats-pro-contact">
-            {contactParts.join('  •  ')}
-          </div>
+      <div className="rt-ats-pro-header" style={isPhotoVisible && personal.photoUrl ? { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 } : undefined}>
+        <div style={isPhotoVisible && personal.photoUrl ? { flex: 1 } : undefined}>
+          <h1 className="rt-ats-pro-name">{personal.fullName || 'Your Name'}</h1>
+          {career.desiredRole && <div className="rt-ats-pro-role">{career.desiredRole}</div>}
+          {contactParts.length > 0 && (
+            <div className="rt-ats-pro-contact">
+              {contactParts.join('  •  ')}
+            </div>
+          )}
+        </div>
+        {isPhotoVisible && personal.photoUrl && (
+          <ProfilePhoto
+            photoUrl={personal.photoUrl}
+            fullName={personal.fullName}
+            shape={shape}
+            size={60}
+            border="2px solid #111827"
+          />
         )}
       </div>
 

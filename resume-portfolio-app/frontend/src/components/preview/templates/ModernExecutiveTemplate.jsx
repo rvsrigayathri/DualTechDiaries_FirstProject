@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 2. Modern Executive Template
@@ -9,11 +9,16 @@ export default function ModernExecutiveTemplate({
   accentColor = '#1e3a8a',
   secondaryColor = '#0f172a',
   fontFamily = 'Inter',
-  sidebarPosition = 'left'
+  sidebarPosition = 'left',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
   const isRight = sidebarPosition === 'right'
@@ -30,9 +35,15 @@ export default function ModernExecutiveTemplate({
     <div className={`rt-modern-exec ${isRight ? 'sidebar-right' : ''}`} style={{ fontFamily: ff }}>
       {/* ── Sidebar ── */}
       <aside className="rt-m-exec-sidebar" style={{ backgroundColor: secondaryColor || '#0f172a' }}>
-        {personal.photoUrl ? (
+        {isPhotoVisible && personal.photoUrl ? (
           <div className="rt-m-exec-avatar-wrap">
-            <img src={personal.photoUrl} alt="Executive" className="rt-m-exec-avatar" />
+            <ProfilePhoto
+              photoUrl={personal.photoUrl}
+              fullName={personal.fullName}
+              shape={shape}
+              size={68}
+              border="2.5px solid rgba(255,255,255,0.4)"
+            />
           </div>
         ) : null}
 

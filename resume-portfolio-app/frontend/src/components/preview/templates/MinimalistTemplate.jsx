@@ -1,4 +1,4 @@
-import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHelpers'
+import { ExpItem, EduItem, ProjectItem, SimpleEntry, ProfilePhoto } from './shared/TemplateHelpers'
 
 /**
  * 11. Minimalist Template
@@ -8,11 +8,16 @@ import { ExpItem, EduItem, ProjectItem, SimpleEntry } from './shared/TemplateHel
 export default function MinimalistTemplate({
   data,
   accentColor = '#18181b',
-  fontFamily = 'Inter'
+  fontFamily = 'Inter',
+  showPhoto,
+  photoShape
 }) {
   const { personal, career, education, skills, experience, projects, certifications, achievements, workshops, leadership, languages, interests, volunteer, settings } = data
   const hidden = settings?.hiddenSections || []
   const show = (k) => !hidden.includes(k)
+
+  const isPhotoVisible = showPhoto !== undefined ? showPhoto : (settings?.showPhoto !== false)
+  const shape = photoShape || settings?.photoShape || 'circle'
 
   const ff = fontFamily === 'Georgia' ? 'Georgia, serif' : `${fontFamily}, sans-serif`
   const allSkills = [
@@ -27,18 +32,29 @@ export default function MinimalistTemplate({
   return (
     <div className="rt-minimal" style={{ fontFamily: ff }}>
       {/* Minimal Header */}
-      <header className="rt-min-header">
-        <h1 className="rt-min-name">{personal.fullName || 'Minimalist Resume'}</h1>
-        {career.desiredRole && <div className="rt-min-role">{career.desiredRole}</div>}
-        <div className="rt-min-contact">
-          {[
-            personal.email,
-            personal.phone ? `${personal.countryCode} ${personal.phone}` : '',
-            personal.location,
-            personal.portfolio,
-            personal.github,
-            personal.linkedin
-          ].filter(Boolean).join('  /  ')}
+      <header className="rt-min-header" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        {isPhotoVisible && personal.photoUrl && (
+          <ProfilePhoto
+            photoUrl={personal.photoUrl}
+            fullName={personal.fullName}
+            shape={shape}
+            size={56}
+            border="1.5px solid #d4d4d8"
+          />
+        )}
+        <div style={{ flex: 1 }}>
+          <h1 className="rt-min-name">{personal.fullName || 'Minimalist Resume'}</h1>
+          {career.desiredRole && <div className="rt-min-role">{career.desiredRole}</div>}
+          <div className="rt-min-contact">
+            {[
+              personal.email,
+              personal.phone ? `${personal.countryCode} ${personal.phone}` : '',
+              personal.location,
+              personal.portfolio,
+              personal.github,
+              personal.linkedin
+            ].filter(Boolean).join('  /  ')}
+          </div>
         </div>
       </header>
 

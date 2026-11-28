@@ -809,6 +809,46 @@ a { color: var(--blue); text-decoration: none; }
 }
 .visibility-pill span { font-size: 14px; }
 
+/* Photo controls group in preview toolbar */
+.photo-controls-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.photo-shape-pills {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.shape-pill {
+  padding: 4px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.shape-pill:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.shape-pill.active {
+  border-color: var(--blue);
+  background: var(--light-blue);
+  color: var(--blue);
+  font-weight: 600;
+}
+.photo-hint-text {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+  margin-left: 6px;
+}
+
 /* 15. Action bar */
 .action-bar {
   position: fixed;
@@ -1841,6 +1881,23 @@ a { color: var(--blue); text-decoration: none; }
 
   /* ── Force browser to print background colors and images ── */
   * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ── Profile photo print fidelity ── */
+  #resume-print-target img,
+  .resume-page img,
+  .rt-photo-frame img {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    display: block !important;
+    max-width: none !important;
+    object-fit: cover !important;
+  }
+  .rt-photo-frame {
+    display: inline-block !important;
+    page-break-inside: avoid !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
