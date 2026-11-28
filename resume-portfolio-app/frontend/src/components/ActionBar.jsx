@@ -9,8 +9,9 @@
  *   autoSaving – boolean      (debounced auto-save in progress)
  *   lastSaved  – string | null
  *   isValid    – boolean (enable/disable PDF)
+ *   validationMessage – string | null (explanation when disabled)
  */
-export default function ActionBar({ onSave, onPrint, onEdit, onReset, saveToast, autoSaving, lastSaved, isValid }) {
+export default function ActionBar({ onSave, onPrint, onEdit, onReset, saveToast, autoSaving, lastSaved, isValid, validationMessage }) {
   const handlePrint = () => {
     onSave()  // persist before printing
 
@@ -88,9 +89,11 @@ export default function ActionBar({ onSave, onPrint, onEdit, onReset, saveToast,
 
         <button
           type="button"
-          className={`btn btn-primary${!isValid ? ' btn-disabled' : ''}`}
+          className="btn btn-primary"
+          disabled={!isValid}
           onClick={isValid ? handlePrint : undefined}
-          title={isValid ? 'Print or Save as PDF' : 'Fill in name and email first'}
+          title={isValid ? 'Print or Save as PDF' : (validationMessage || 'Fill in name and valid email first')}
+          aria-disabled={!isValid}
         >
           📄 Download PDF
         </button>

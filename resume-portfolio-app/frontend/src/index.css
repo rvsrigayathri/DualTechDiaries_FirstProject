@@ -459,10 +459,14 @@ a { color: var(--blue); text-decoration: none; }
 }
 .btn-icon:hover { background: var(--bg); color: var(--text); }
 .btn-icon.danger:hover { background: var(--error-bg); color: var(--error); }
-.btn-disabled {
+.btn-disabled,
+.btn:disabled,
+.btn[disabled] {
   opacity: 0.45;
-  cursor: not-allowed;
-  pointer-events: none;
+  cursor: not-allowed !important;
+  pointer-events: auto !important; /* Allow browser tooltip to display on hover */
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* 7. Tags / Chips */

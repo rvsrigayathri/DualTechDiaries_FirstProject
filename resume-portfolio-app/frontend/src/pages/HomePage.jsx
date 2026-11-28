@@ -49,7 +49,7 @@ export default function HomePage({ onGoDashboard, resumeIdToLoad, initialMobileT
   }, [resumeIdToLoad])
 
   // ── Validation ────────────────────────────────────────────
-  const { getError, touch, touchAll, isFormValid } = useValidation(data)
+  const { getError, touch, touchAll, isFormValid, validationMessage } = useValidation(data)
 
   // ── Active section (sidebar navigation) ──────────────────
   const [activeSection, setActiveSection] = useState('personal')
@@ -206,6 +206,7 @@ export default function HomePage({ onGoDashboard, resumeIdToLoad, initialMobileT
         autoSaving={autoSaving}
         lastSaved={lastSaved}
         isValid={isFormValid}
+        validationMessage={validationMessage}
       />
     </Layout>
   )
