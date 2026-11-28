@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import companyLogo from '../assets/company-logo.jpg'
 
 export default function LoginPage({ onNavigate }) {
   const { login } = useAuth()
@@ -37,6 +38,13 @@ export default function LoginPage({ onNavigate }) {
       <div className="auth-card">
         {/* Brand */}
         <div className="auth-header">
+          <div className="auth-logo-wrapper">
+            <img
+              src={companyLogo}
+              alt="Dual Tech Diaries - Bridging Heritage and Technology"
+              className="auth-company-logo"
+            />
+          </div>
           <div className="auth-brand-badge">📄 ResumeCraft</div>
           <h1>Welcome Back</h1>
           <p>Sign in to access your resumes and continue editing.</p>
