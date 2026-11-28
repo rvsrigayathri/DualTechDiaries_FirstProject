@@ -129,8 +129,14 @@ export default function LoginPage({ onNavigate }) {
                 ✉️ dualtechdiaries@gmail.com
               </a>
               <span className="contact-divider">|</span>
-              <a href="tel:+917354666252" className="contact-link" title="Call Us">
-                📞 +91 7354666252
+              <a
+                href="https://wa.me/917354666252"
+                target="_blank"
+                rel="noreferrer"
+                className="contact-link"
+                title="Chat on WhatsApp"
+              >
+                💬 WhatsApp: +91 7354666252
               </a>
               <span className="contact-divider">|</span>
               <a
