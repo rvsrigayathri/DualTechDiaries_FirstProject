@@ -125,28 +125,37 @@ export default function LoginPage({ onNavigate }) {
           {/* Contact Details & Links */}
           <div className="company-contact-bar">
             <div className="contact-info-items">
-              <a href="mailto:dualtechdiaries@gmail.com" className="contact-link" title="Email Us">
-                ✉️ dualtechdiaries@gmail.com
+              <a href="mailto:dualtechdiaries@gmail.com" className="contact-link contact-pill" title="Email Us via Gmail">
+                <svg className="contact-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path fill="#EA4335" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.5l8.073-6.007C21.69 2.28 24 3.434 24 5.457z"/>
+                </svg>
+                <span>dualtechdiaries@gmail.com</span>
               </a>
-              <span className="contact-divider">|</span>
+
               <a
                 href="https://wa.me/917354666252"
                 target="_blank"
                 rel="noreferrer"
-                className="contact-link"
+                className="contact-link contact-pill"
                 title="Chat on WhatsApp"
               >
-                💬 WhatsApp: +91 7354666252
+                <svg className="contact-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path fill="#25D366" d="M12.004 0C5.374 0 0 5.373 0 12c0 2.115.553 4.184 1.603 6.005L0 24l6.166-1.579A11.94 11.94 0 0 0 12.004 24c6.627 0 12-5.373 12-12s-5.373-12-12-12zm.004 21.905a9.88 9.88 0 0 1-5.044-1.378l-.362-.215-3.664.939.977-3.571-.237-.377A9.873 9.873 0 0 1 2.095 12c0-5.464 4.444-9.905 9.909-9.905 5.464 0 9.905 4.441 9.905 9.905 0 5.464-4.441 9.905-9.905 9.905zm5.426-7.41c-.297-.149-1.758-.868-2.03-.967-.272-.099-.47-.149-.668.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.496.099-.198.05-.372-.025-.52-.074-.149-.668-1.611-.916-2.206-.241-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                </svg>
+                <span>WhatsApp: +91 7354666252</span>
               </a>
-              <span className="contact-divider">|</span>
+
               <a
                 href="https://www.linkedin.com/in/r-srigayathri-rajkumar-096600328/"
                 target="_blank"
                 rel="noreferrer"
-                className="contact-link"
+                className="contact-link contact-pill"
                 title="Connect on LinkedIn"
               >
-                💼 LinkedIn Profile
+                <svg className="contact-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path fill="#0A66C2" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                <span>LinkedIn Profile</span>
               </a>
             </div>
             <p className="closing-statement">

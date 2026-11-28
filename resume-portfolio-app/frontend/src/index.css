@@ -2452,23 +2452,34 @@ a { color: var(--blue); text-decoration: none; }
   font-size: 12px;
 }
 
-.contact-link {
-  color: var(--blue);
-  text-decoration: none;
-  font-weight: 500;
+.contact-pill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  transition: color var(--transition);
+  gap: 7px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all var(--transition);
 }
 
-.contact-link:hover {
-  text-decoration: underline;
-  color: var(--navy);
+.contact-pill:hover {
+  background: #ffffff;
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 2px 8px rgba(36, 87, 214, 0.1);
+  transform: translateY(-1px);
+  text-decoration: none;
 }
 
-.contact-divider {
-  color: #cbd5e1;
+.contact-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  display: block;
 }
 
 .closing-statement {
