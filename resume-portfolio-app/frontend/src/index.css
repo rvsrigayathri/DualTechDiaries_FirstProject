@@ -2179,6 +2179,328 @@ a { color: var(--blue); text-decoration: none; }
    ResumeCraft — Authentication & Dashboard Styles
    ============================================================ */
 
+/* ── Auth Page Wrapper & 2-Column Responsive Layout ── */
+.auth-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 10% 20%, #e8effe 0%, #f4f7fc 95%);
+  padding: 36px 20px;
+}
+
+.auth-layout-container {
+  width: 100%;
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 32px;
+  align-items: stretch;
+}
+
+/* ── Company Showcase Panel (Left) ── */
+.company-showcase-panel {
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(36, 87, 214, 0.08);
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.company-showcase-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue), #6366f1, #06b6d4);
+}
+
+.company-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 18px;
+}
+
+.company-logo-frame {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border: 1.5px solid var(--border-light);
+  border-radius: 14px;
+  padding: 4px;
+}
+
+.company-showcase-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.company-title-block {
+  flex: 1;
+}
+
+.company-badge-pill {
+  display: inline-block;
+  background: var(--light-blue);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+}
+
+.company-main-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 4px 0;
+  letter-spacing: -0.4px;
+}
+
+.company-tagline {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blue);
+  margin: 0 0 2px 0;
+}
+
+.company-subtagline {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.company-card-block {
+  background: #f8faff;
+  border: 1px solid #e1e9fb;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+}
+
+.company-card-block h3 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 6px 0;
+}
+
+.company-card-block p {
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.company-two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.company-mini-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.company-mini-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 6px 0;
+}
+
+.company-mini-card p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.company-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.company-bullet-list li {
+  font-size: 11.5px;
+  color: #475569;
+  line-height: 1.4;
+  position: relative;
+  padding-left: 12px;
+}
+
+.company-bullet-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--blue);
+  font-weight: bold;
+}
+
+.company-product-spotlight {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+.product-badge {
+  display: inline-block;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.company-product-spotlight h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+}
+
+.product-desc {
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+.product-features-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.product-features-chips span {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.company-values-row h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 8px 0;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+}
+
+.val-pill {
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: #334155;
+  line-height: 1.35;
+}
+
+.val-pill strong {
+  color: var(--navy);
+}
+
+.company-contact-bar {
+  border-top: 1px solid var(--border-light);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-info-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.contact-link {
+  color: var(--blue);
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color var(--transition);
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+  color: var(--navy);
+}
+
+.contact-divider {
+  color: #cbd5e1;
+}
+
+.closing-statement {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Auth Card Panel (Right) ── */
+.auth-card-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 960px) {
+  .auth-layout-container {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .company-showcase-panel {
+    padding: 24px 20px;
+    order: 2; /* Put login form first on mobile screens for fast sign-in */
+  }
+  .auth-card-panel {
+    order: 1;
+  }
+  .company-two-col-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Auth Container & Card ── */
 .auth-container {
   min-height: 100vh;
